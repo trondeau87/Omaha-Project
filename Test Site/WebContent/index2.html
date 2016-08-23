@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>Omaha!</title>
+<script src="jquery-2.2.0.min.js"></script>
+<h1>RANDOM INTEGER</h1>
+<h1>Math.random();</h1>
+<Style>
+body{
+font-family: sans-serif;
+size: 4vh;
+height: 100vh;
+margin: none;
+top:0;
+left:0;
+background-image: url("images/omaha.jpg");
+background-size: cover;
+background-position: center;
+background-repeat: none;
+padding: 1.0em;
+box-sizing: border-box;
+color: black;
+font-weight: bold;
+}
+	#cities-popup {
+		padding: 1em;
+		box-sizing: border-box;
+		border-radius: 0.5em;
+		padding: 1em;
+		font-size: 1em;
+		background-color: rgba(255,255,255,0.5);
+		left: 50%;
+		top: 50%;
+		position: absolute;
+		transform: translate(-50%,-50%);
+		display: none;
+		color: black;
+		min-width: 20ch;
+	}
+		#cities-popup td:nth-child(2){
+    text-align: right;
+    white-space:nowrap;
+}
+
+#cities-popup td:nth-child(1){
+padding-right: 1em;
+}
+
+#cities-popup > h4 {
+text-align: center;
+color: black;
+font-weight: bold;
+text-decoration:underline;
+}
+
+h1{
+font-style: italic;
+size: 8vh;
+color: black;
+}
+nav {
+position: absolute;
+bottom: 1.0em;
+right: 2.0em;
+}
+nav > span {
+cursor: pointer;
+padding-left: 0.5em;
+padding-right: 0.5em;
+}
+nav > span:hover {
+text-decoration: underline;
+}
+</Style>
+<script>
+h1{
+function getRandom() {
+	  return Math.random();
+	}
+}
+	$(document).ready(function() {
+		function makeCity(data) {
+			var div = $("#cities-popup > div");
+			div.empty();
+			var v = "";
+			v+=("<table>");
+			v+=("<tr>");
+			v+=("</tr>");
+			for (var i=0;i<data.length;i++) {
+				v+=("<tr><td>"+data[i].name+"</td><td>"+data[i].population+"</td></tr>");
+			}
+             v+=("</table>");
+             div.append(v);
+			div.parent().fadeIn(250);
+		}
+		$("#cities").click(function() {
+			$.ajax({
+				url: "omaha",
+				method: "POST",
+				dataType: "json",
+				error: function() {
+					alert ("ERROR");
+					
+				},
+				success: function(data) {
+					console.log(data);
+					if (Array.isArray(data)) {
+						makeCity(data);
+					}
+					else {
+						alert(data.msg);
+					}
+				}
+			});
+			return false;
+		});
+	});
+
+</script>
+
+		
+		
+		
+</head>
+<body>
+<nav> <span class="link">History</span><span class="link" id="cities">Cities</span><span class="link">Things to do</span></nav>
+	<div id="cities-popup">
+		<h4>CITIES LIST:</h4>
+		<div></div>
+	</div>
+</body>
+</html>
